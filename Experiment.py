@@ -20,12 +20,12 @@ class Experiment:
         self.highestFitnessExperiment = 0.0   
         
         # 100 generations per run
-        # ten repeats for each experiment         
         for generationNumber in range(1,101):
             complexity = 0.0
             fitness = 0.0
             highestFitness = 0.0
             highestComplexity =0.0
+            # ten repeats for each experiment    
             for repeat in range(10):
                 genStats = Generation(directory,experimentNumber,repeat,generationNumber)
                 complexity = complexity + genStats.averageComplexity
@@ -35,7 +35,8 @@ class Experiment:
                 if(genStats.highestComplexity>highestComplexity):
                     highestComplexity = genStats.highestComplexity
         
-            self.generationStats[generationNumber] = GenStats(complexity/10,fitness/10,highestComplexity,highestFitness)
+            # generations labeled from 1 but indexing from 0
+            self.generationStats[generationNumber-1] = GenStats(complexity/10,fitness/10,highestComplexity,highestFitness)
             if(highestFitness > self.highestFitnessExperiment):
                 self.highestFitnessExperiment = highestFitness
             if(highestComplexity > self.highestComplexityExperiment):
