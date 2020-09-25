@@ -4,4 +4,10 @@ class Results:
     'class that is wrapper for either all baseline or all complexity cost experiments'
     def __init__(self, directory):
         self.dir = directory
-        experiment1 = Experiment(directory,1)
+        
+        # Evolutions conducted over 12 environments
+        self.experiments = [None] * 12 
+        
+        for i in range(12):
+            experiments[i] = Experiment(directory,i)
+        
