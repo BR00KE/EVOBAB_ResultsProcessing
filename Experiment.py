@@ -14,6 +14,12 @@ class Experiment:
         
         self.generationStats = [None] * 100 # 100 generations per experiment
         
+        #array for avgComplexity over generations 
+        self.avgComplexityArray = [None] *100
+        #array for avgFitness over generations 
+        self.avgFitnessArray = [None] *100
+        
+        
         # largest complexity score achieved over all repeats and all generations
         self.highestComplexityExperiment = 0.0
         # largest fitness score achieved over all repeats and all generations
@@ -36,7 +42,14 @@ class Experiment:
                     highestComplexity = genStats.highestComplexity
         
             # generations labeled from 1 but indexing from 0
-            self.generationStats[generationNumber-1] = GenStats(complexity/10,fitness/10,highestComplexity,highestFitness)
+            # average over all repeats for avg of pop at given generation 
+            averageComplexity = complexity/10
+            self.avgComplexityArray[generationNumber-1] = averageComplexity
+            averageFitness = fitness/10
+            self.avgFitnessArray[generationNumber-1] = averageFitness
+            
+            self.generationStats[generationNumber-1] = GenStats(averageComplexity,averageFitness,highestComplexity,highestFitness)
+            
             if(highestFitness > self.highestFitnessExperiment):
                 self.highestFitnessExperiment = highestFitness
             if(highestComplexity > self.highestComplexityExperiment):
