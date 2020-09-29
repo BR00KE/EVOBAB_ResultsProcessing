@@ -2,6 +2,7 @@ from Results import Results
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import pandas as pd
 from scipy import stats
 
 def main():
@@ -22,7 +23,24 @@ def main():
         
         if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
             print("different varaince " + str(e))
-        
+    
+    ######################################################################################################################################
+    #print("making Mann-Whitney Statistical comparison table")
+    
+    #table = []
+    #for e in range(12):
+        #enviro = [ e+1 ]
+        #u_statistic, p_value = stats.mannwhitneyu(baseline.experiments[e].averageFitnessPerRepeat, complexityCost.experiments[e].averageFitnessPerRepeat)
+        #enviro.append(p_value)
+        #u_statistic, p_value = stats.mannwhitneyu(baseline.experiments[e].averageComplexityPerRepeat, complexityCost.experiments[e].averageComplexityPerRepeat)
+        #enviro.append(p_value)
+        #u_statistic, p_value = stats.mannwhitneyu(baseline.experiments[e].highestFitnessPerRepeat, complexityCost.experiments[e].highestFitnessPerRepeat)
+        #enviro.append(p_value)
+        #u_statistic, p_value = stats.mannwhitneyu(baseline.experiments[e].highestComplexityPerRepeat, complexityCost.experiments[e].highestComplexityPerRepeat)
+        #enviro.append(p_value)        
+        #table.append(enviro)
+    #df = pd.DataFrame(np.array(table), columns = ['Environment','Average Fitness', ' Average Robot Complexity', 'Best Fitness', 'Complexity Associated with Best Fitness'])
+    #print(df.to_latex(index=False))
     ######################################################################################################################################
     #print("box and whisker plots")
     #mpl.use('agg')
