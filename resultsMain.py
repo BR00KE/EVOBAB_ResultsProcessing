@@ -13,33 +13,33 @@ def main():
     complexityCost = Results("noveltyResults/complexityCost/")
        
     ######################################################################################################################################
-    print("levene test for equal variance")
+    #print("levene test for equal variance")
     
-    for e in range(12):
-        af = stats.levene(baseline.experiments[e].averageFitnessPerRepeat, complexityCost.experiments[e].averageFitnessPerRepeat)
-        ac = stats.levene(baseline.experiments[e].averageComplexityPerRepeat, complexityCost.experiments[e].averageComplexityPerRepeat)
-        hf = stats.levene(baseline.experiments[e].highestFitnessPerRepeat, complexityCost.experiments[e].highestFitnessPerRepeat)
-        hc = stats.levene(baseline.experiments[e].highestComplexityPerRepeat, complexityCost.experiments[e].highestComplexityPerRepeat)
+    #for e in range(12):
+        #af = stats.levene(baseline.experiments[e].averageFitnessPerRepeat, complexityCost.experiments[e].averageFitnessPerRepeat)
+        #ac = stats.levene(baseline.experiments[e].averageComplexityPerRepeat, complexityCost.experiments[e].averageComplexityPerRepeat)
+        #hf = stats.levene(baseline.experiments[e].highestFitnessPerRepeat, complexityCost.experiments[e].highestFitnessPerRepeat)
+        #hc = stats.levene(baseline.experiments[e].highestComplexityPerRepeat, complexityCost.experiments[e].highestComplexityPerRepeat)
         
-        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
-            print("different varaince " + str(e))
+        #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            #print("different varaince " + str(e))
     
-    for s in range(4):
-        af = stats.levene(baseline.experiments[3*s+0].averageFitnessPerRepeat, baseline.experiments[3*s+1].averageFitnessPerRepeat, baseline.experiments[3*s+2].averageFitnessPerRepeat)
-        ac = stats.levene(baseline.experiments[3*s+0].averageComplexityPerRepeat, baseline.experiments[3*s+1].averageComplexityPerRepeat, baseline.experiments[3*s+2].averageComplexityPerRepeat)
-        hf = stats.levene(baseline.experiments[3*s+0].highestFitnessPerRepeat, baseline.experiments[3*s+1].highestFitnessPerRepeat, baseline.experiments[3*s+2].highestFitnessPerRepeat)
-        hc = stats.levene(baseline.experiments[3*s+0].highestComplexityPerRepeat, baseline.experiments[3*s+1].highestComplexityPerRepeat, baseline.experiments[3*s+2].highestComplexityPerRepeat)
+    #for s in range(4):
+        #af = stats.levene(baseline.experiments[3*s+0].averageFitnessPerRepeat, baseline.experiments[3*s+1].averageFitnessPerRepeat, baseline.experiments[3*s+2].averageFitnessPerRepeat)
+        #ac = stats.levene(baseline.experiments[3*s+0].averageComplexityPerRepeat, baseline.experiments[3*s+1].averageComplexityPerRepeat, baseline.experiments[3*s+2].averageComplexityPerRepeat)
+        #hf = stats.levene(baseline.experiments[3*s+0].highestFitnessPerRepeat, baseline.experiments[3*s+1].highestFitnessPerRepeat, baseline.experiments[3*s+2].highestFitnessPerRepeat)
+        #hc = stats.levene(baseline.experiments[3*s+0].highestComplexityPerRepeat, baseline.experiments[3*s+1].highestComplexityPerRepeat, baseline.experiments[3*s+2].highestComplexityPerRepeat)
         
-        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
-            print("different varaince baseline set " + str(s+1))
+        #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            #print("different varaince baseline set " + str(s+1))
             
-        af = stats.levene(complexityCost.experiments[3*s+0].averageFitnessPerRepeat, complexityCost.experiments[3*s+1].averageFitnessPerRepeat, complexityCost.experiments[3*s+2].averageFitnessPerRepeat)
-        ac = stats.levene(complexityCost.experiments[3*s+0].averageComplexityPerRepeat, complexityCost.experiments[3*s+1].averageComplexityPerRepeat, complexityCost.experiments[3*s+2].averageComplexityPerRepeat)
-        hf = stats.levene(complexityCost.experiments[3*s+0].highestFitnessPerRepeat, complexityCost.experiments[3*s+1].highestFitnessPerRepeat, complexityCost.experiments[3*s+2].highestFitnessPerRepeat)
-        hc = stats.levene(complexityCost.experiments[3*s+0].highestComplexityPerRepeat, complexityCost.experiments[3*s+1].highestComplexityPerRepeat, complexityCost.experiments[3*s+2].highestComplexityPerRepeat)
+        #af = stats.levene(complexityCost.experiments[3*s+0].averageFitnessPerRepeat, complexityCost.experiments[3*s+1].averageFitnessPerRepeat, complexityCost.experiments[3*s+2].averageFitnessPerRepeat)
+        #ac = stats.levene(complexityCost.experiments[3*s+0].averageComplexityPerRepeat, complexityCost.experiments[3*s+1].averageComplexityPerRepeat, complexityCost.experiments[3*s+2].averageComplexityPerRepeat)
+        #hf = stats.levene(complexityCost.experiments[3*s+0].highestFitnessPerRepeat, complexityCost.experiments[3*s+1].highestFitnessPerRepeat, complexityCost.experiments[3*s+2].highestFitnessPerRepeat)
+        #hc = stats.levene(complexityCost.experiments[3*s+0].highestComplexityPerRepeat, complexityCost.experiments[3*s+1].highestComplexityPerRepeat, complexityCost.experiments[3*s+2].highestComplexityPerRepeat)
         
-        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
-            print("different varaince complexityCost set " + str(s+1))
+        #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            #print("different varaince complexityCost set " + str(s+1))
     ######################################################################################################################################
     #print("making Mann-Whitney Statistical comparison table")
     
@@ -58,16 +58,70 @@ def main():
     #df = pd.DataFrame(np.array(table), columns = ['Environment','Average Fitness', ' Average Robot Complexity', 'Best Fitness', 'Complexity Associated with Best Fitness'])
     #print(df.to_latex(index=False))
     ######################################################################################################################################
-    #print("box and whisker plots")
-    #mpl.use('agg')
+    print("box and whisker plots")
+    mpl.use('agg')
     
-    ##the data for a boxplot is in the form of a list of lists 
+    #the data for a boxplot is in the form of a list of lists 
     #data_to_plot = [baseline.experiments[0].highestFitnessPerRepeat, complexityCost.experiments[0].highestFitnessPerRepeat,baseline.experiments[1].highestFitnessPerRepeat, complexityCost.experiments[1].highestFitnessPerRepeat]
     #highestFitnessPerRepeatBoxplot = plt.figure(1,figsize=(9,6))
     #ax = highestFitnessPerRepeatBoxplot.add_subplot(111)
     #bp = ax.boxplot(data_to_plot)
     #highestFitnessPerRepeatBoxplot.savefig('highestFitnessBoxPlot.png',bbox_inches='tight')
     
+    boxPlots, axes = plt.subplots(2,2)
+    boxPlots.set_figheight(12)
+    boxPlots.set_figwidth(14)
+    
+    labelsSet1 = ['1','1','2','2','3','3']
+    labelsSet2 = ['4','4','5','5','6','6']
+    labelsSet3 = ['7','7','8','8','9','9']
+    labelsSet4 = ['10','10','11','11','12','12']
+    
+    colors = ['green','blue','green','blue','green','blue']
+    
+    set1data=[]
+    set2data=[]
+    set3data=[]
+    set4data=[]
+    #create set data alternating baseline and complexityCost
+    for e in range(6):
+        if(e%2==0):
+            i = int(e/2)
+            set1data.append(baseline.experiments[i].highestFitnessPerRepeat)
+            set2data.append(baseline.experiments[3+i].highestFitnessPerRepeat)
+            set3data.append(baseline.experiments[6+i].highestFitnessPerRepeat)
+            set4data.append(baseline.experiments[9+i].highestFitnessPerRepeat)
+        else:
+            i = int((e-1)/2)
+            set1data.append(complexityCost.experiments[i].highestFitnessPerRepeat)
+            set2data.append(complexityCost.experiments[3+i].highestFitnessPerRepeat)
+            set3data.append(complexityCost.experiments[6+i].highestFitnessPerRepeat)
+            set4data.append(complexityCost.experiments[9+i].highestFitnessPerRepeat)            
+    
+    
+    bplotSet1 = axes[0][0].boxplot(set1data, vert=True, patch_artist=True, labels = labelsSet1)
+    axes[0][0].set_title('Environment Set 1')
+    axes[0][0].set_ylabel('Task Performance')
+    axes[0][0].set_xlabel('Environment')
+    bplotSet2 = axes[0][1].boxplot(set2data, vert=True, patch_artist=True, labels = labelsSet2)
+    axes[0][1].set_title('Environment Set 2')
+    axes[0][1].set_xlabel('Environment')
+    axes[0][1].set_ylabel('Task Performance')
+    bplotSet3 = axes[1][0].boxplot(set3data, vert=True, patch_artist=True, labels = labelsSet3)
+    axes[1][0].set_title('Environment Set 3')
+    axes[1][0].set_xlabel('Environment')
+    axes[1][0].set_ylabel('Task Performance')
+    bplotSet4 = axes[1][1].boxplot(set4data, vert=True, patch_artist=True, labels = labelsSet4)
+    axes[1][1].set_title('Environment Set 4')    
+    axes[1][1].set_xlabel('Environment')
+    axes[1][1].set_ylabel('Task Performance')
+    
+    for bplot in (bplotSet1,bplotSet2,bplotSet3,bplotSet4):
+        for patch,color in zip(bplot['boxes'],colors):
+            patch.set_facecolor(color)
+    
+    
+    boxPlots.savefig('highestAverageFitnessBoxplot.png')        
     
     ######################################################################################################################################
     #print("plotting graphs")
@@ -245,7 +299,7 @@ def main():
     #Shapiro-wilk test for dataset normality
     #test rejects the hypothesis of normality when the p-value is p <=0.05
     #failing the normality test allows you to state with 95% confidence that the data does not fit the normal distribution
-    np.random.seed(12345678)
+    #np.random.seed(12345678)
     #print("Shapiro-Wilk tests for dataset normality")
     
     #test normality of all the average fitness datasets
