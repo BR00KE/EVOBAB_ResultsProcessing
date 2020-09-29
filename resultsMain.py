@@ -24,6 +24,22 @@ def main():
         if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
             print("different varaince " + str(e))
     
+    for s in range(4):
+        af = stats.levene(baseline.experiments[3*s+0].averageFitnessPerRepeat, baseline.experiments[3*s+1].averageFitnessPerRepeat, baseline.experiments[3*s+2].averageFitnessPerRepeat)
+        ac = stats.levene(baseline.experiments[3*s+0].averageComplexityPerRepeat, baseline.experiments[3*s+1].averageComplexityPerRepeat, baseline.experiments[3*s+2].averageComplexityPerRepeat)
+        hf = stats.levene(baseline.experiments[3*s+0].highestFitnessPerRepeat, baseline.experiments[3*s+1].highestFitnessPerRepeat, baseline.experiments[3*s+2].highestFitnessPerRepeat)
+        hc = stats.levene(baseline.experiments[3*s+0].highestComplexityPerRepeat, baseline.experiments[3*s+1].highestComplexityPerRepeat, baseline.experiments[3*s+2].highestComplexityPerRepeat)
+        
+        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            print("different varaince baseline set " + str(s+1))
+            
+        af = stats.levene(complexityCost.experiments[3*s+0].averageFitnessPerRepeat, complexityCost.experiments[3*s+1].averageFitnessPerRepeat, complexityCost.experiments[3*s+2].averageFitnessPerRepeat)
+        ac = stats.levene(complexityCost.experiments[3*s+0].averageComplexityPerRepeat, complexityCost.experiments[3*s+1].averageComplexityPerRepeat, complexityCost.experiments[3*s+2].averageComplexityPerRepeat)
+        hf = stats.levene(complexityCost.experiments[3*s+0].highestFitnessPerRepeat, complexityCost.experiments[3*s+1].highestFitnessPerRepeat, complexityCost.experiments[3*s+2].highestFitnessPerRepeat)
+        hc = stats.levene(complexityCost.experiments[3*s+0].highestComplexityPerRepeat, complexityCost.experiments[3*s+1].highestComplexityPerRepeat, complexityCost.experiments[3*s+2].highestComplexityPerRepeat)
+        
+        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            print("different varaince complexityCost set " + str(s+1))
     ######################################################################################################################################
     #print("making Mann-Whitney Statistical comparison table")
     
