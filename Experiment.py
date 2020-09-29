@@ -1,9 +1,11 @@
 from Generation import Generation
 class GenStats:
     'class to hold the average complexity and novelty over all repeats for generation'
-    def __init__(self, averageComplexity, averageFitness, highestComplexity, highestFitness):
+    def __init__(self, averageComplexity, averageFitness, averageHighestFitness, averageHighestComplexity, highestComplexity, highestFitness):
         self.averageComplexity = averageComplexity
         self.averageFitness = averageFitness
+        self.averageHighestFitness = averageHighestFitness
+        self.averageHighestComplexity = averageHighestComplexity
         self.highestComplexity = highestComplexity
         self.highestFitness = highestFitness
         
@@ -19,8 +21,19 @@ class Experiment:
         #array for avgFitness over generations 
         self.avgFitnessArray = [None] *100
         
+        # array of the average highest fitness individuals for each generation over the ten repeats
+        self.avgHighestFitnessArray = [None] * 100
+        # array of the average complexity of the individuals with the highest fitness at each generation over the ten repeats
+        self.avgHighestComplexityArray = [None] * 100
         
-        # largest complexity score achieved over all repeats and all generations
+        #highest fitness and associated complexity at generation 100 for each of the repeats
+        self.highestFitnessPerRepeat = [None] * 10
+        self.highestComplexityPerRepeat = [None] * 10
+        #average fitness and average complexity at generation 100 for each of the repeats
+        self.averageFitnessPerRepeat = [None] * 10
+        self.averageComplexityPerRepeat = [None] * 10
+        
+        # complexity of individual that achieved the highest fitness 
         self.highestComplexityExperiment = 0.0
         # largest fitness score achieved over all repeats and all generations
         self.highestFitnessExperiment = 0.0   
@@ -31,16 +44,30 @@ class Experiment:
             fitness = 0.0
             highestFitness = 0.0
             highestComplexity =0.0
+            
+            totalHighestFitness = 0.0
+            totalHighestComplexity = 0.0 
+            
             # ten repeats for each experiment    
             for repeat in range(10):
                 genStats = Generation(directory,experimentNumber,repeat,generationNumber)
                 complexity = complexity + genStats.averageComplexity
                 fitness = fitness + genStats.averageFitness
+                
+                totalHighestComplexity += genStats.highestComplexity
+                totalHighestFitness += genStats.highestFitness
+                
                 if(genStats.highestFitness>highestFitness):
                     highestFitness = genStats.highestFitness
-                if(genStats.highestComplexity>highestComplexity):
                     highestComplexity = genStats.highestComplexity
         
+                
+                if(generationNumber==100):
+                    self.highestFitnessPerRepeat[repeat] = genStats.highestFitness
+                    self.highestComplexityPerRepeat[repeat] = genStats.highestComplexity
+                    self.averageFitnessPerRepeat[repeat] = genStats.averageFitness
+                    self.averageComplexityPerRepeat[repeat] = genStats.averageComplexity
+                
             # generations labeled from 1 but indexing from 0
             # average over all repeats for avg of pop at given generation 
             averageComplexity = complexity/10
@@ -48,7 +75,12 @@ class Experiment:
             averageFitness = fitness/10
             self.avgFitnessArray[generationNumber-1] = averageFitness
             
-            self.generationStats[generationNumber-1] = GenStats(averageComplexity,averageFitness,highestComplexity,highestFitness)
+            averageHighestComplexity = totalHighestComplexity/10
+            self.avgHighestComplexityArray[generationNumber-1] = averageHighestComplexity
+            averageHighestFitness = totalHighestFitness/10
+            self.avgHighestFitnessArray[generationNumber-1] = averageHighestFitness
+            
+            self.generationStats[generationNumber-1] = GenStats(averageComplexity,averageFitness,averageHighestFitness, averageHighestComplexity, highestComplexity,highestFitness)
             
             if(highestFitness > self.highestFitnessExperiment):
                 self.highestFitnessExperiment = highestFitness
