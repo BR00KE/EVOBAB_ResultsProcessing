@@ -2,17 +2,37 @@ from Results import Results
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from scipy import stats
 
 def main():
     print("initialising baseline")
     baseline = Results("noveltyResults/baseline/")
     
-    
     print("initialising complexityCost")
     complexityCost = Results("noveltyResults/complexityCost/")
-    
+       
     ######################################################################################################################################
-    print("box and whisker plots")
+    print("levene test for equal variance")
+    
+    for e in range(12):
+        af = stats.levene(baseline.experiments[e].averageFitnessPerRepeat, complexityCost.experiments[e].averageFitnessPerRepeat)
+        ac = stats.levene(baseline.experiments[e].averageComplexityPerRepeat, complexityCost.experiments[e].averageComplexityPerRepeat)
+        hf = stats.levene(baseline.experiments[e].highestFitnessPerRepeat, complexityCost.experiments[e].highestFitnessPerRepeat)
+        hc = stats.levene(baseline.experiments[e].highestComplexityPerRepeat, complexityCost.experiments[e].highestComplexityPerRepeat)
+        
+        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            print("different varaince " + str(e))
+        
+    ######################################################################################################################################
+    #print("box and whisker plots")
+    #mpl.use('agg')
+    
+    ##the data for a boxplot is in the form of a list of lists 
+    #data_to_plot = [baseline.experiments[0].highestFitnessPerRepeat, complexityCost.experiments[0].highestFitnessPerRepeat,baseline.experiments[1].highestFitnessPerRepeat, complexityCost.experiments[1].highestFitnessPerRepeat]
+    #highestFitnessPerRepeatBoxplot = plt.figure(1,figsize=(9,6))
+    #ax = highestFitnessPerRepeatBoxplot.add_subplot(111)
+    #bp = ax.boxplot(data_to_plot)
+    #highestFitnessPerRepeatBoxplot.savefig('highestFitnessBoxPlot.png',bbox_inches='tight')
     
     
     ######################################################################################################################################
@@ -188,6 +208,42 @@ def main():
     #complexityTrend.savefig('avgComplexityOverGenerations.png')    
     ######################################################################################################################################
     
+    #Shapiro-wilk test for dataset normality
+    #test rejects the hypothesis of normality when the p-value is p <=0.05
+    #failing the normality test allows you to state with 95% confidence that the data does not fit the normal distribution
+    np.random.seed(12345678)
+    #print("Shapiro-Wilk tests for dataset normality")
+    
+    #test normality of all the average fitness datasets
+    #print("baseline")
+    #for e in range(12):
+        #avgFitnessTest = stats.shapiro(baseline.experiments[e].averageFitnessPerRepeat)
+        #if(avgFitnessTest.pvalue<=0.05):
+            #print("not normal " + str(e) + " " + str(avgFitnessTest.pvalue))
+        #avgComplexityTest = stats.shapiro(baseline.experiments[e].averageComplexityPerRepeat)
+        #if(avgComplexityTest.pvalue<=0.05):
+            #print("not normal " + str(e) + " " + str(avgComplexityTest.pvalue)) 
+        #highestFitnessTest = stats.shapiro(baseline.experiments[e].highestFitnessPerRepeat)
+        #if(highestFitnessTest.pvalue<=0.05):
+            #print("not normal higest fitness " + str(e) + " " + str(highestFitnessTest.pvalue))   
+        #highestComplexityTest = stats.shapiro(baseline.experiments[e].highestComplexityPerRepeat)
+        #if(highestComplexityTest.pvalue<=0.05):
+            #print("not normal highest complexity " + str(e) + " " + str(highestComplexityTest.pvalue))       
+    #print("complexityCost")
+    #for e in range(12):
+        #avgFitnessTest = stats.shapiro(complexityCost.experiments[e].averageFitnessPerRepeat)
+        #if(avgFitnessTest.pvalue<=0.05):
+            #print("not normal " + str(e) + " " + str(avgFitnessTest.pvalue))
+        #avgComplexityTest = stats.shapiro(complexityCost.experiments[e].averageComplexityPerRepeat)
+        #if(avgComplexityTest.pvalue<=0.05):
+            #print("not normal " + str(e) + " " + str(avgComplexityTest.pvalue)) 
+        #highestFitnessTest = stats.shapiro(complexityCost.experiments[e].highestFitnessPerRepeat)
+        #if(highestFitnessTest.pvalue<=0.05):
+            #print("not normal highest fitness " + str(e) + " " + str(highestFitnessTest.pvalue))   
+        #highestComplexityTest = stats.shapiro(complexityCost.experiments[e].highestComplexityPerRepeat)
+        #if(highestComplexityTest.pvalue<=0.05):
+            #print("not normal highest complexity " + str(e)  + " " + str(highestComplexityTest.pvalue))    
+    ######################################################################################################################################
     print("program done")
     
     
