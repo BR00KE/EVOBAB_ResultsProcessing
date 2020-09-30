@@ -2,6 +2,7 @@ from Results import Results
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import pandas as pd
 from scipy import stats
 
@@ -60,17 +61,10 @@ def main():
     ######################################################################################################################################
     print("box and whisker plots")
     mpl.use('agg')
-    
-    #the data for a boxplot is in the form of a list of lists 
-    #data_to_plot = [baseline.experiments[0].highestFitnessPerRepeat, complexityCost.experiments[0].highestFitnessPerRepeat,baseline.experiments[1].highestFitnessPerRepeat, complexityCost.experiments[1].highestFitnessPerRepeat]
-    #highestFitnessPerRepeatBoxplot = plt.figure(1,figsize=(9,6))
-    #ax = highestFitnessPerRepeatBoxplot.add_subplot(111)
-    #bp = ax.boxplot(data_to_plot)
-    #highestFitnessPerRepeatBoxplot.savefig('highestFitnessBoxPlot.png',bbox_inches='tight')
-    
-    boxPlots, axes = plt.subplots(2,2)
-    boxPlots.set_figheight(12)
-    boxPlots.set_figwidth(14)
+        
+    boxPlots, axes = plt.subplots(1,4, sharey=True)
+    boxPlots.set_figheight(4)
+    boxPlots.set_figwidth(16)
     
     labelsSet1 = ['1','1','2','2','3','3']
     labelsSet2 = ['4','4','5','5','6','6']
@@ -87,41 +81,43 @@ def main():
     for e in range(6):
         if(e%2==0):
             i = int(e/2)
-            set1data.append(baseline.experiments[i].highestFitnessPerRepeat)
-            set2data.append(baseline.experiments[3+i].highestFitnessPerRepeat)
-            set3data.append(baseline.experiments[6+i].highestFitnessPerRepeat)
-            set4data.append(baseline.experiments[9+i].highestFitnessPerRepeat)
+            set1data.append(baseline.experiments[i].highestComplexityPerRepeat)
+            set2data.append(baseline.experiments[3+i].highestComplexityPerRepeat)
+            set3data.append(baseline.experiments[6+i].highestComplexityPerRepeat)
+            set4data.append(baseline.experiments[9+i].highestComplexityPerRepeat)
         else:
             i = int((e-1)/2)
-            set1data.append(complexityCost.experiments[i].highestFitnessPerRepeat)
-            set2data.append(complexityCost.experiments[3+i].highestFitnessPerRepeat)
-            set3data.append(complexityCost.experiments[6+i].highestFitnessPerRepeat)
-            set4data.append(complexityCost.experiments[9+i].highestFitnessPerRepeat)            
+            set1data.append(complexityCost.experiments[i].highestComplexityPerRepeat)
+            set2data.append(complexityCost.experiments[3+i].highestComplexityPerRepeat)
+            set3data.append(complexityCost.experiments[6+i].highestComplexityPerRepeat)
+            set4data.append(complexityCost.experiments[9+i].highestComplexityPerRepeat)            
     
     
-    bplotSet1 = axes[0][0].boxplot(set1data, vert=True, patch_artist=True, labels = labelsSet1)
-    axes[0][0].set_title('Environment Set 1')
-    axes[0][0].set_ylabel('Task Performance')
-    axes[0][0].set_xlabel('Environment')
-    bplotSet2 = axes[0][1].boxplot(set2data, vert=True, patch_artist=True, labels = labelsSet2)
-    axes[0][1].set_title('Environment Set 2')
-    axes[0][1].set_xlabel('Environment')
-    axes[0][1].set_ylabel('Task Performance')
-    bplotSet3 = axes[1][0].boxplot(set3data, vert=True, patch_artist=True, labels = labelsSet3)
-    axes[1][0].set_title('Environment Set 3')
-    axes[1][0].set_xlabel('Environment')
-    axes[1][0].set_ylabel('Task Performance')
-    bplotSet4 = axes[1][1].boxplot(set4data, vert=True, patch_artist=True, labels = labelsSet4)
-    axes[1][1].set_title('Environment Set 4')    
-    axes[1][1].set_xlabel('Environment')
-    axes[1][1].set_ylabel('Task Performance')
+    bplotSet1 = axes[0].boxplot(set1data, vert=True, patch_artist=True, labels = labelsSet1)
+    axes[0].set_title('Environment Set 1')
+    axes[0].set_ylabel('Robot Complexity')
+    axes[0].set_xlabel('Environment Number')
+    bplotSet2 = axes[1].boxplot(set2data, vert=True, patch_artist=True, labels = labelsSet2)
+    axes[1].set_title('Environment Set 2')
+    axes[1].set_xlabel('Environment Number')
+    #axes[0][1].set_ylabel('Task Performance')
+    bplotSet3 = axes[2].boxplot(set3data, vert=True, patch_artist=True, labels = labelsSet3)
+    axes[2].set_title('Environment Set 3')
+    axes[2].set_xlabel('Environment Number')
+    #axes[2].set_ylabel('Task Performance')
+    bplotSet4 = axes[3].boxplot(set4data, vert=True, patch_artist=True, labels = labelsSet4)
+    axes[3].set_title('Environment Set 4')    
+    axes[3].set_xlabel('Environment Number')
+    #axes[1][1].set_ylabel('Task Performance')
     
     for bplot in (bplotSet1,bplotSet2,bplotSet3,bplotSet4):
         for patch,color in zip(bplot['boxes'],colors):
             patch.set_facecolor(color)
     
-    
-    boxPlots.savefig('highestAverageFitnessBoxplot.png')        
+    green_patch = mpatches.Patch(color='green',label='Baseline')
+    blue_patch = mpatches.Patch(color='blue',label = 'Complexity\n Cost')
+    boxPlots.legend(handles=[green_patch,blue_patch], title='Experiment',loc=4)
+    boxPlots.savefig('highestAverageComplexityBoxplot.png')        
     
     ######################################################################################################################################
     #print("plotting graphs")
