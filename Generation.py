@@ -10,6 +10,7 @@ class Generation:
         # fitness and associated complexity of highest fitness individual for the generation
         highestFitness = 0.0
         highestComplexity = 0.0
+        lowestFitness = 100.0
         
         file = directory + "Experiment" + str(experiment) + "/novelty_output" + str(repeat) + "/" + "Generation-"+ str(genNumber) +"-PopStats_Complexity-Fitness-Novelty.txt"
         # read in 
@@ -22,6 +23,8 @@ class Generation:
             if(float(line_split[1])>highestFitness): #individual with the highest fitness and the corresponding complexity of this inidividual
                 highestFitness = float(line_split[1])
                 highestComplexity = float(line_split[0])
+            if(float(line_split[1])<lowestFitness):
+                lowestFitness = float(line_split[1])
             stats = popstats.readline()
         popstats.close()
         
@@ -30,3 +33,5 @@ class Generation:
         
         self.highestFitness = highestFitness
         self.highestComplexity = highestComplexity       
+        
+        self.lowestFitness = lowestFitness

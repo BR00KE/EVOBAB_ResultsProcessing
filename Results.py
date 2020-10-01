@@ -9,4 +9,5 @@ class Results:
         
         for i in range(12):
             self.experiments[i] = Experiment(directory,i)
+            # print(self.experiments[i].lowestFitnessExperiment)
         

@@ -12,7 +12,10 @@ def main():
     
     print("initialising complexityCost")
     complexityCost = Results("noveltyResults/complexityCost/")
-       
+    
+    maxFitness = 6.1009
+    minFitness = complexityCost.experiments[7].lowestFitnessExperiment
+    
     ######################################################################################################################################
     #print("levene test for equal variance")
     
@@ -25,22 +28,35 @@ def main():
         #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
             #print("different varaince " + str(e))
     
-    #for s in range(4):
-        #af = stats.levene(baseline.experiments[3*s+0].averageFitnessPerRepeat, baseline.experiments[3*s+1].averageFitnessPerRepeat, baseline.experiments[3*s+2].averageFitnessPerRepeat)
-        #ac = stats.levene(baseline.experiments[3*s+0].averageComplexityPerRepeat, baseline.experiments[3*s+1].averageComplexityPerRepeat, baseline.experiments[3*s+2].averageComplexityPerRepeat)
-        #hf = stats.levene(baseline.experiments[3*s+0].highestFitnessPerRepeat, baseline.experiments[3*s+1].highestFitnessPerRepeat, baseline.experiments[3*s+2].highestFitnessPerRepeat)
-        #hc = stats.levene(baseline.experiments[3*s+0].highestComplexityPerRepeat, baseline.experiments[3*s+1].highestComplexityPerRepeat, baseline.experiments[3*s+2].highestComplexityPerRepeat)
+    for s in range(4):
+        af = stats.levene(baseline.experiments[3*s+0].averageFitnessPerRepeat, baseline.experiments[3*s+1].averageFitnessPerRepeat, baseline.experiments[3*s+2].averageFitnessPerRepeat)
+        ac = stats.levene(baseline.experiments[3*s+0].averageComplexityPerRepeat, baseline.experiments[3*s+1].averageComplexityPerRepeat, baseline.experiments[3*s+2].averageComplexityPerRepeat)
+        hf = stats.levene(baseline.experiments[3*s+0].highestFitnessPerRepeat, baseline.experiments[3*s+1].highestFitnessPerRepeat, baseline.experiments[3*s+2].highestFitnessPerRepeat)
+        hc = stats.levene(baseline.experiments[3*s+0].highestComplexityPerRepeat, baseline.experiments[3*s+1].highestComplexityPerRepeat, baseline.experiments[3*s+2].highestComplexityPerRepeat)
         
-        #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
-            #print("different varaince baseline set " + str(s+1))
+        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            print("different varaince baseline set " + str(s+1))
             
-        #af = stats.levene(complexityCost.experiments[3*s+0].averageFitnessPerRepeat, complexityCost.experiments[3*s+1].averageFitnessPerRepeat, complexityCost.experiments[3*s+2].averageFitnessPerRepeat)
-        #ac = stats.levene(complexityCost.experiments[3*s+0].averageComplexityPerRepeat, complexityCost.experiments[3*s+1].averageComplexityPerRepeat, complexityCost.experiments[3*s+2].averageComplexityPerRepeat)
-        #hf = stats.levene(complexityCost.experiments[3*s+0].highestFitnessPerRepeat, complexityCost.experiments[3*s+1].highestFitnessPerRepeat, complexityCost.experiments[3*s+2].highestFitnessPerRepeat)
-        #hc = stats.levene(complexityCost.experiments[3*s+0].highestComplexityPerRepeat, complexityCost.experiments[3*s+1].highestComplexityPerRepeat, complexityCost.experiments[3*s+2].highestComplexityPerRepeat)
+        af = stats.levene(complexityCost.experiments[3*s+0].averageFitnessPerRepeat, complexityCost.experiments[3*s+1].averageFitnessPerRepeat, complexityCost.experiments[3*s+2].averageFitnessPerRepeat)
+        ac = stats.levene(complexityCost.experiments[3*s+0].averageComplexityPerRepeat, complexityCost.experiments[3*s+1].averageComplexityPerRepeat, complexityCost.experiments[3*s+2].averageComplexityPerRepeat)
+        hf = stats.levene(complexityCost.experiments[3*s+0].highestFitnessPerRepeat, complexityCost.experiments[3*s+1].highestFitnessPerRepeat, complexityCost.experiments[3*s+2].highestFitnessPerRepeat)
+        hc = stats.levene(complexityCost.experiments[3*s+0].highestComplexityPerRepeat, complexityCost.experiments[3*s+1].highestComplexityPerRepeat, complexityCost.experiments[3*s+2].highestComplexityPerRepeat)
         
-        #if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
-            #print("different varaince complexityCost set " + str(s+1))
+        if(af.pvalue<=0.05 or ac.pvalue<=0.05 or hf.pvalue<=0.05 or hc.pvalue<=0.05):
+            print("different varaince complexityCost set " + str(s+1))
+            
+    #print("levene's test for equal variance environments")
+    for e in range(3):
+        # compare with others of same friction 
+        for e2 in range(1,4): 
+            lv = stats.levene(baseline.experiments[e].highestFitnessPerRepeat, baseline.experiments[e + e2*3].highestFitnessPerRepeat)
+            u_stat, p_value = stats.mannwhitneyu(baseline.experiments[e].highestFitnessPerRepeat, baseline.experiments[e + e2*3].highestFitnessPerRepeat)
+            print("pval: environment " + str(e) + " and environment " + str(e+e2*3) + " = " + str(p_value))
+            print()
+            if(lv.pvalue<=0.05):
+                print("unequal variance environment " + str(e) + " and environment " + str(e+e2*3) + " pval: " + str(p_value))
+    
+    
     ######################################################################################################################################
     #print("making Mann-Whitney Statistical comparison table")
     
@@ -81,21 +97,31 @@ def main():
     for e in range(6):
         if(e%2==0):
             i = int(e/2)
-            set1data.append(baseline.experiments[i].highestComplexityPerRepeat)
-            set2data.append(baseline.experiments[3+i].highestComplexityPerRepeat)
-            set3data.append(baseline.experiments[6+i].highestComplexityPerRepeat)
-            set4data.append(baseline.experiments[9+i].highestComplexityPerRepeat)
+            set1data.append(baseline.experiments[i].highestFitnessPerRepeat)
+            set2data.append(baseline.experiments[3+i].highestFitnessPerRepeat)
+            set3data.append(baseline.experiments[6+i].highestFitnessPerRepeat)
+            set4data.append(baseline.experiments[9+i].highestFitnessPerRepeat)
         else:
             i = int((e-1)/2)
-            set1data.append(complexityCost.experiments[i].highestComplexityPerRepeat)
-            set2data.append(complexityCost.experiments[3+i].highestComplexityPerRepeat)
-            set3data.append(complexityCost.experiments[6+i].highestComplexityPerRepeat)
-            set4data.append(complexityCost.experiments[9+i].highestComplexityPerRepeat)            
+            set1data.append(complexityCost.experiments[i].highestFitnessPerRepeat)
+            set2data.append(complexityCost.experiments[3+i].highestFitnessPerRepeat)
+            set3data.append(complexityCost.experiments[6+i].highestFitnessPerRepeat)
+            set4data.append(complexityCost.experiments[9+i].highestFitnessPerRepeat)            
     
+    
+    #normalise the fitness values
+    print(set1data)
+    for i in range(len(set1data)):
+        set1data[i][:] = [((x-minFitness)/(maxFitness-minFitness)) for x in set1data[i]]
+        set2data[i][:] = [((x-minFitness)/(maxFitness-minFitness)) for x in set1data[i]]
+        set3data[i][:] = [((x-minFitness)/(maxFitness-minFitness)) for x in set1data[i]]
+        set4data[i][:] = [((x-minFitness)/(maxFitness-minFitness)) for x in set1data[i]]
+    
+    print(set1data)
     
     bplotSet1 = axes[0].boxplot(set1data, vert=True, patch_artist=True, labels = labelsSet1)
     axes[0].set_title('Environment Set 1')
-    axes[0].set_ylabel('Robot Complexity')
+    axes[0].set_ylabel('Task Performance')
     axes[0].set_xlabel('Environment Number')
     bplotSet2 = axes[1].boxplot(set2data, vert=True, patch_artist=True, labels = labelsSet2)
     axes[1].set_title('Environment Set 2')
@@ -117,53 +143,59 @@ def main():
     green_patch = mpatches.Patch(color='green',label='Baseline')
     blue_patch = mpatches.Patch(color='blue',label = 'Complexity\n Cost')
     boxPlots.legend(handles=[green_patch,blue_patch], title='Experiment',loc=4)
-    boxPlots.savefig('highestAverageComplexityBoxplot.png')        
+    boxPlots.savefig('highestAverageFitnessBoxplot.png')        
     
     ######################################################################################################################################
-    #print("plotting graphs")
-    #x_axis = list(range(1,101))
+    print("plotting graphs")
+    x_axis = list(range(1,101))
     
-    #print("plotting highest fitness trend")
-    #highestFitnessTrend, (baselinehf, complexityCosthf) = plt.subplots(1,2,sharey=True)
-    ## fitnessTrend.suptitle("Graph showing the average fitness of the population over all generations for evolutions in each environment for both experiments", wrap=True)
+    print("plotting highest fitness trend")
+    highestFitnessTrend, (baselinehf, complexityCosthf) = plt.subplots(1,2,sharey=True)
+    # fitnessTrend.suptitle("Graph showing the average fitness of the population over all generations for evolutions in each environment for both experiments", wrap=True)
     
-    #highestFitnessTrend.set_figheight(5)
-    #highestFitnessTrend.set_figwidth(14)
+    highestFitnessTrend.set_figheight(5)
+    highestFitnessTrend.set_figwidth(14)
     
-    #baselinehf.set_title("Baseline Experiment")
-    #baselinehf.set_ylabel("Average Highest Fitness")
-    #baselinehf.set_xlabel("Generation")
-    #baselinehf.plot(x_axis, baseline.experiments[0].avgHighestFitnessArray, color = 'tab:grey', label='Environment 1')
-    #baselinehf.plot(x_axis, baseline.experiments[1].avgHighestFitnessArray, color = 'tab:olive', label='Environment 2')
-    #baselinehf.plot(x_axis, baseline.experiments[2].avgHighestFitnessArray, color = 'tab:green', label='Environment 3')
-    #baselinehf.plot(x_axis, baseline.experiments[3].avgHighestFitnessArray, color = 'tab:brown', label='Environment 4')
-    #baselinehf.plot(x_axis, baseline.experiments[4].avgHighestFitnessArray, color = 'tab:orange', label='Environment 5')
-    #baselinehf.plot(x_axis, baseline.experiments[5].avgHighestFitnessArray, color = 'tab:red', label='Environment 6')
-    #baselinehf.plot(x_axis, baseline.experiments[6].avgHighestFitnessArray, color = 'tab:pink', label='Environment 7')
-    #baselinehf.plot(x_axis, baseline.experiments[7].avgHighestFitnessArray, color = 'tab:purple', label='Environment 8')
-    #baselinehf.plot(x_axis, baseline.experiments[8].avgHighestFitnessArray, color = 'magenta', label='Environment 9')
-    #baselinehf.plot(x_axis, baseline.experiments[9].avgHighestFitnessArray, color = 'cyan', label='Environment 10')
-    #baselinehf.plot(x_axis, baseline.experiments[10].avgHighestFitnessArray, color = 'tab:blue', label='Environment 11')
-    #baselinehf.plot(x_axis, baseline.experiments[11].avgHighestFitnessArray, color = 'blue', label='Environment 12')
+    #normalise the highest fitness values to between 0 and 1
+    for i in range(12):
+        baseline.experiments[i].avgHighestFitnessArray[:] = [((x-minFitness)/(maxFitness-minFitness)) for x in baseline.experiments[i].avgHighestFitnessArray]
+        complexityCost.experiments[i].avgHighestFitnessArray[:] = [((x-minFitness)/(maxFitness-minFitness)) for x in complexityCost.experiments[i].avgHighestFitnessArray]
+        
     
-    #complexityCosthf.set_title("Complexity Cost Experiment")
-    #complexityCosthf.set_ylabel("Average Highest Fitness")
-    #complexityCosthf.set_xlabel("Generation")    
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[0].avgHighestFitnessArray, color = 'tab:grey')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[1].avgHighestFitnessArray, color = 'tab:olive')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[2].avgHighestFitnessArray, color = 'tab:green')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[3].avgHighestFitnessArray, color = 'tab:brown')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[4].avgHighestFitnessArray, color = 'tab:orange')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[5].avgHighestFitnessArray, color = 'tab:red')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[6].avgHighestFitnessArray, color = 'tab:pink')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[7].avgHighestFitnessArray, color = 'tab:purple')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[8].avgHighestFitnessArray, color = 'magenta')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[9].avgHighestFitnessArray, color = 'cyan')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[10].avgHighestFitnessArray, color = 'tab:blue')
-    #complexityCosthf.plot(x_axis, complexityCost.experiments[11].avgHighestFitnessArray, color = 'blue')    
+    baselinehf.set_title("Baseline Experiment")
+    baselinehf.set_ylabel("Average Highest Task Performance")
+    baselinehf.set_xlabel("Generation")
+    baselinehf.plot(x_axis, baseline.experiments[0].avgHighestFitnessArray, color = 'tab:grey', label='Environment 1')
+    baselinehf.plot(x_axis, baseline.experiments[1].avgHighestFitnessArray, color = 'tab:olive', label='Environment 2')
+    baselinehf.plot(x_axis, baseline.experiments[2].avgHighestFitnessArray, color = 'tab:green', label='Environment 3')
+    baselinehf.plot(x_axis, baseline.experiments[3].avgHighestFitnessArray, color = 'tab:brown', label='Environment 4')
+    baselinehf.plot(x_axis, baseline.experiments[4].avgHighestFitnessArray, color = 'tab:orange', label='Environment 5')
+    baselinehf.plot(x_axis, baseline.experiments[5].avgHighestFitnessArray, color = 'tab:red', label='Environment 6')
+    baselinehf.plot(x_axis, baseline.experiments[6].avgHighestFitnessArray, color = 'tab:pink', label='Environment 7')
+    baselinehf.plot(x_axis, baseline.experiments[7].avgHighestFitnessArray, color = 'tab:purple', label='Environment 8')
+    baselinehf.plot(x_axis, baseline.experiments[8].avgHighestFitnessArray, color = 'magenta', label='Environment 9')
+    baselinehf.plot(x_axis, baseline.experiments[9].avgHighestFitnessArray, color = 'cyan', label='Environment 10')
+    baselinehf.plot(x_axis, baseline.experiments[10].avgHighestFitnessArray, color = 'tab:blue', label='Environment 11')
+    baselinehf.plot(x_axis, baseline.experiments[11].avgHighestFitnessArray, color = 'blue', label='Environment 12')
     
-    #highestFitnessTrend.legend(loc='center right')
-    #highestFitnessTrend.savefig('highestFitnessOverGenerations.png')
+    complexityCosthf.set_title("Complexity Cost Experiment")
+    complexityCosthf.set_ylabel("Average Highest Task Performance")
+    complexityCosthf.set_xlabel("Generation")    
+    complexityCosthf.plot(x_axis, complexityCost.experiments[0].avgHighestFitnessArray, color = 'tab:grey')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[1].avgHighestFitnessArray, color = 'tab:olive')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[2].avgHighestFitnessArray, color = 'tab:green')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[3].avgHighestFitnessArray, color = 'tab:brown')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[4].avgHighestFitnessArray, color = 'tab:orange')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[5].avgHighestFitnessArray, color = 'tab:red')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[6].avgHighestFitnessArray, color = 'tab:pink')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[7].avgHighestFitnessArray, color = 'tab:purple')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[8].avgHighestFitnessArray, color = 'magenta')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[9].avgHighestFitnessArray, color = 'cyan')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[10].avgHighestFitnessArray, color = 'tab:blue')
+    complexityCosthf.plot(x_axis, complexityCost.experiments[11].avgHighestFitnessArray, color = 'blue')    
+    
+    highestFitnessTrend.legend(loc='center right')
+    highestFitnessTrend.savefig('highestFitnessOverGenerations.png')
     
     #print("plotting highest complexity trends")
     #highestComplexityTrend, (baselinehc, complexityCosthc) = plt.subplots(1,2,sharey=True)
@@ -207,47 +239,52 @@ def main():
     #highestComplexityTrend.legend(loc='center right')
     #highestComplexityTrend.savefig('highestComplexityOverGenerations.png')    
     ######################################################################################################################################
-    #print("plotting fitness trends")
-    #fitnessTrend, (baselinef, complexityCostf) = plt.subplots(1,2,sharey=True)
-    ## fitnessTrend.suptitle("Graph showing the average fitness of the population over all generations for evolutions in each environment for both experiments", wrap=True)
+    print("plotting fitness trends")
+    fitnessTrend, (baselinef, complexityCostf) = plt.subplots(1,2,sharey=True)
+    # fitnessTrend.suptitle("Graph showing the average fitness of the population over all generations for evolutions in each environment for both experiments", wrap=True)
     
-    #fitnessTrend.set_figheight(5)
-    #fitnessTrend.set_figwidth(14)
+    fitnessTrend.set_figheight(5)
+    fitnessTrend.set_figwidth(14)
     
-    #baselinef.set_title("Baseline Experiment")
-    #baselinef.set_ylabel("Average Fitness of Population")
-    #baselinef.set_xlabel("Generation")
-    #baselinef.plot(x_axis, baseline.experiments[0].avgFitnessArray, color = 'tab:grey', label='Environment 1')
-    #baselinef.plot(x_axis, baseline.experiments[1].avgFitnessArray, color = 'tab:olive', label='Environment 2')
-    #baselinef.plot(x_axis, baseline.experiments[2].avgFitnessArray, color = 'tab:green', label='Environment 3')
-    #baselinef.plot(x_axis, baseline.experiments[3].avgFitnessArray, color = 'tab:brown', label='Environment 4')
-    #baselinef.plot(x_axis, baseline.experiments[4].avgFitnessArray, color = 'tab:orange', label='Environment 5')
-    #baselinef.plot(x_axis, baseline.experiments[5].avgFitnessArray, color = 'tab:red', label='Environment 6')
-    #baselinef.plot(x_axis, baseline.experiments[6].avgFitnessArray, color = 'tab:pink', label='Environment 7')
-    #baselinef.plot(x_axis, baseline.experiments[7].avgFitnessArray, color = 'tab:purple', label='Environment 8')
-    #baselinef.plot(x_axis, baseline.experiments[8].avgFitnessArray, color = 'magenta', label='Environment 9')
-    #baselinef.plot(x_axis, baseline.experiments[9].avgFitnessArray, color = 'cyan', label='Environment 10')
-    #baselinef.plot(x_axis, baseline.experiments[10].avgFitnessArray, color = 'tab:blue', label='Environment 11')
-    #baselinef.plot(x_axis, baseline.experiments[11].avgFitnessArray, color = 'blue', label='Environment 12')
+    for i in range(12):
+        baseline.experiments[i].avgFitnessArray[:] = [((x-minFitness)/(maxFitness-minFitness)) for x in baseline.experiments[i].avgFitnessArray]
+        complexityCost.experiments[i].avgFitnessArray[:] = [((x-minFitness)/(maxFitness-minFitness)) for x in complexityCost.experiments[i].avgFitnessArray]
     
-    #complexityCostf.set_title("Complexity Cost Experiment")
-    #complexityCostf.set_ylabel("Average Fitness of Population")
-    #complexityCostf.set_xlabel("Generation")    
-    #complexityCostf.plot(x_axis, complexityCost.experiments[0].avgFitnessArray, color = 'tab:grey')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[1].avgFitnessArray, color = 'tab:olive')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[2].avgFitnessArray, color = 'tab:green')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[3].avgFitnessArray, color = 'tab:brown')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[4].avgFitnessArray, color = 'tab:orange')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[5].avgFitnessArray, color = 'tab:red')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[6].avgFitnessArray, color = 'tab:pink')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[7].avgFitnessArray, color = 'tab:purple')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[8].avgFitnessArray, color = 'magenta')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[9].avgFitnessArray, color = 'cyan')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[10].avgFitnessArray, color = 'tab:blue')
-    #complexityCostf.plot(x_axis, complexityCost.experiments[11].avgFitnessArray, color = 'blue')    
     
-    #fitnessTrend.legend(loc='center right')
-    #fitnessTrend.savefig('avgFitnessOverGenerations.png')
+    baselinef.set_title("Baseline Experiment")
+    baselinef.set_ylabel("Average Task Performance of Population")
+    baselinef.set_xlabel("Generation")
+    baselinef.plot(x_axis, baseline.experiments[0].avgFitnessArray, color = 'tab:grey', label='Environment 1')
+    baselinef.plot(x_axis, baseline.experiments[1].avgFitnessArray, color = 'tab:olive', label='Environment 2')
+    baselinef.plot(x_axis, baseline.experiments[2].avgFitnessArray, color = 'tab:green', label='Environment 3')
+    baselinef.plot(x_axis, baseline.experiments[3].avgFitnessArray, color = 'tab:brown', label='Environment 4')
+    baselinef.plot(x_axis, baseline.experiments[4].avgFitnessArray, color = 'tab:orange', label='Environment 5')
+    baselinef.plot(x_axis, baseline.experiments[5].avgFitnessArray, color = 'tab:red', label='Environment 6')
+    baselinef.plot(x_axis, baseline.experiments[6].avgFitnessArray, color = 'tab:pink', label='Environment 7')
+    baselinef.plot(x_axis, baseline.experiments[7].avgFitnessArray, color = 'tab:purple', label='Environment 8')
+    baselinef.plot(x_axis, baseline.experiments[8].avgFitnessArray, color = 'magenta', label='Environment 9')
+    baselinef.plot(x_axis, baseline.experiments[9].avgFitnessArray, color = 'cyan', label='Environment 10')
+    baselinef.plot(x_axis, baseline.experiments[10].avgFitnessArray, color = 'tab:blue', label='Environment 11')
+    baselinef.plot(x_axis, baseline.experiments[11].avgFitnessArray, color = 'blue', label='Environment 12')
+    
+    complexityCostf.set_title("Complexity Cost Experiment")
+    complexityCostf.set_ylabel("Average Task Performance of Population")
+    complexityCostf.set_xlabel("Generation")    
+    complexityCostf.plot(x_axis, complexityCost.experiments[0].avgFitnessArray, color = 'tab:grey')
+    complexityCostf.plot(x_axis, complexityCost.experiments[1].avgFitnessArray, color = 'tab:olive')
+    complexityCostf.plot(x_axis, complexityCost.experiments[2].avgFitnessArray, color = 'tab:green')
+    complexityCostf.plot(x_axis, complexityCost.experiments[3].avgFitnessArray, color = 'tab:brown')
+    complexityCostf.plot(x_axis, complexityCost.experiments[4].avgFitnessArray, color = 'tab:orange')
+    complexityCostf.plot(x_axis, complexityCost.experiments[5].avgFitnessArray, color = 'tab:red')
+    complexityCostf.plot(x_axis, complexityCost.experiments[6].avgFitnessArray, color = 'tab:pink')
+    complexityCostf.plot(x_axis, complexityCost.experiments[7].avgFitnessArray, color = 'tab:purple')
+    complexityCostf.plot(x_axis, complexityCost.experiments[8].avgFitnessArray, color = 'magenta')
+    complexityCostf.plot(x_axis, complexityCost.experiments[9].avgFitnessArray, color = 'cyan')
+    complexityCostf.plot(x_axis, complexityCost.experiments[10].avgFitnessArray, color = 'tab:blue')
+    complexityCostf.plot(x_axis, complexityCost.experiments[11].avgFitnessArray, color = 'blue')    
+    
+    fitnessTrend.legend(loc='center right')
+    fitnessTrend.savefig('avgFitnessOverGenerations.png')
     
     #print("plotting complexity trends")
     #complexityTrend, (baselinec, complexityCostc) = plt.subplots(1,2,sharey=True)

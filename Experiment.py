@@ -38,12 +38,16 @@ class Experiment:
         # largest fitness score achieved over all repeats and all generations
         self.highestFitnessExperiment = 0.0   
         
+        self.lowestFitnessExperiment = 100.0
+        
         # 100 generations per run
         for generationNumber in range(1,101):
             complexity = 0.0
             fitness = 0.0
             highestFitness = 0.0
             highestComplexity =0.0
+            
+            lowestFitness = 100.0
             
             totalHighestFitness = 0.0
             totalHighestComplexity = 0.0 
@@ -61,6 +65,8 @@ class Experiment:
                     highestFitness = genStats.highestFitness
                     highestComplexity = genStats.highestComplexity
         
+                if(genStats.lowestFitness<lowestFitness):
+                    lowestFitness = genStats.lowestFitness
                 
                 if(generationNumber==100):
                     self.highestFitnessPerRepeat[repeat] = genStats.highestFitness
@@ -87,4 +93,5 @@ class Experiment:
             if(highestComplexity > self.highestComplexityExperiment):
                 self.highestComplexityExperiment = highestComplexity
                 
-            
+            if(lowestFitness<self.lowestFitnessExperiment):
+                self.lowestFitnessExperiment = lowestFitness
