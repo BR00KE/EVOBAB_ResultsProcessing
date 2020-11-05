@@ -12,6 +12,8 @@ class Generation:
         highestComplexity = 0.0
         lowestFitness = 100.0
         
+        maxComplexity = 0.0
+        
         file = directory + "Experiment" + str(experiment) + "/novelty_output" + str(repeat) + "/" + "Generation-"+ str(genNumber) +"-PopStats_Complexity-Fitness-Novelty.txt"
         # read in 
         popstats = open(file,"r")
@@ -25,6 +27,8 @@ class Generation:
                 highestComplexity = float(line_split[0])
             if(float(line_split[1])<lowestFitness):
                 lowestFitness = float(line_split[1])
+            if(float(line_split[0])>maxComplexity): #maximum complexity achieved
+                maxComplexity = float(line_split[0])
             stats = popstats.readline()
         popstats.close()
         
@@ -35,3 +39,5 @@ class Generation:
         self.highestComplexity = highestComplexity       
         
         self.lowestFitness = lowestFitness
+        
+        self.maxComplexity = maxComplexity

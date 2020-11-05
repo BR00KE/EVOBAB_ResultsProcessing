@@ -26,6 +26,8 @@ class Experiment:
         # array of the average complexity of the individuals with the highest fitness at each generation over the ten repeats
         self.avgHighestComplexityArray = [None] * 100
         
+        self.maxComplexityArray = [None] *100
+        
         #highest fitness and associated complexity at generation 100 for each of the repeats
         self.highestFitnessPerRepeat = [None] * 10
         self.highestComplexityPerRepeat = [None] * 10
@@ -49,6 +51,8 @@ class Experiment:
             
             lowestFitness = 100.0
             
+            totalMaxComplexity = 0.0
+            
             totalHighestFitness = 0.0
             totalHighestComplexity = 0.0 
             
@@ -67,6 +71,8 @@ class Experiment:
         
                 if(genStats.lowestFitness<lowestFitness):
                     lowestFitness = genStats.lowestFitness
+                    
+                totalMaxComplexity += genStats.maxComplexity
                 
                 if(generationNumber==100):
                     self.highestFitnessPerRepeat[repeat] = genStats.highestFitness
@@ -80,6 +86,8 @@ class Experiment:
             self.avgComplexityArray[generationNumber-1] = averageComplexity
             averageFitness = fitness/10
             self.avgFitnessArray[generationNumber-1] = averageFitness
+            
+            self.maxComplexityArray[generationNumber-1] = totalMaxComplexity/10
             
             averageHighestComplexity = totalHighestComplexity/10
             self.avgHighestComplexityArray[generationNumber-1] = averageHighestComplexity
